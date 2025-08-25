@@ -4,8 +4,6 @@ import { Mail, Lock } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { FcGoogle } from "react-icons/fc";   // Google logo (colorful)
-import { FaFacebook } from "react-icons/fa"; // Facebook logo
 
 export default function Login() {
   const router = useRouter();
@@ -83,12 +81,6 @@ export default function Login() {
                   <label className="block text-sm font-medium text-gray-200">
                     Password
                   </label>
-                  <Link
-                    href="/forgot-password"
-                    className="text-xs text-cyan-400 hover:underline"
-                  >
-                    Forgot Password?
-                  </Link>
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
@@ -141,29 +133,6 @@ export default function Login() {
                 )}
               </button>
             </form>
-
-            {/* Divider */}
-            <div className="flex items-center gap-3 my-6">
-              <div className="h-[1px] bg-gray-600 flex-1"></div>
-              <span className="text-gray-400 text-sm">OR</span>
-              <div className="h-[1px] bg-gray-600 flex-1"></div>
-            </div>
-
-            {/* Social Login */}
-            <div className="flex flex-col gap-3">
-              <button
-                className="w-full flex items-center justify-center gap-2 border border-gray-600 py-3 rounded-xl text-white hover:bg-white/10 transition"
-              >
-                <FcGoogle size={20} />
-                Continue with Google
-              </button>
-              <button
-                className="w-full flex items-center justify-center gap-2 border border-gray-600 py-3 rounded-xl text-white hover:bg-white/10 transition"
-              >
-                <FaFacebook size={20} />
-                Continue with Facebook
-              </button>
-            </div>
 
             {/* Signup Link */}
             <p className="text-center text-sm text-gray-400 mt-6">

@@ -4,8 +4,6 @@ import { Mail, Lock, User } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { FcGoogle } from "react-icons/fc";   // Google logo (colorful)
-import { FaFacebook } from "react-icons/fa"; // Facebook logo
 
 
 export default function Signup() {
@@ -38,7 +36,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-[110vh] flex items-center justify-center bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4">
+    <div className="min-h-[100vh] flex items-center justify-center bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4">
       <div className="bg-white/10 backdrop-blur-xl shadow-2xl rounded-3xl w-full max-w-md p-8 border border-white/20">
         
         {/* If signup success */}
@@ -157,27 +155,6 @@ export default function Signup() {
             </form>
           </>
         )}
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-6">
-          <div className="h-[1px] bg-gray-600 flex-1"></div>
-          <span className="text-gray-400 text-sm">OR</span>
-          <div className="h-[1px] bg-gray-600 flex-1"></div>
-        </div>
-
-        {/* Social Sign Up */}
-        <div className="flex flex-col gap-3">
-          <button
-            className="w-full flex items-center justify-center gap-2 border border-gray-600 py-3 rounded-xl text-white hover:bg-white/10 transition">
-            <FcGoogle size={20} />
-            Continue with Google
-          </button>
-          <button
-            className="w-full flex items-center justify-center gap-2 border border-gray-600 py-3 rounded-xl text-white hover:bg-white/10 transition">
-            <FaFacebook size={20} />
-            Continue with Facebook
-          </button>
-        </div>
 
         {/* Login Link */}
         <p className="text-center text-sm text-gray-400 mt-6">
