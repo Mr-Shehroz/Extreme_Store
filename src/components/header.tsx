@@ -1,34 +1,45 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Menu, X, Search, ShoppingCart, User } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import axios from "axios";
 
 export default function Header() {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false); // mobile menu
-  const [searchOpen, setSearchOpen] = useState(false); // search bar
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await axios.get("/api/users/me");
-        setIsLoggedIn(res.data.authenticated);
-      } catch (error) {
-        setIsLoggedIn(false);
-      }
-    };
-    checkAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // null = unknown (prevents flicker)
+
+  const checkAuth = useCallback(async () => {
+    try {
+      const res = await axios.get("/api/users/me", { withCredentials: true });
+      setIsLoggedIn(!!res.data?.authenticated);
+    } catch {
+      setIsLoggedIn(false);
+    }
   }, []);
+
+  // 1) Initial + on route change
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth, pathname]);
+
+  // 2) React to custom auth-change events
+  useEffect(() => {
+    const handler = () => checkAuth();
+    window.addEventListener("auth:changed", handler);
+    return () => window.removeEventListener("auth:changed", handler);
+  }, [checkAuth]);
 
   const logout = async (e: any) => {
     e.preventDefault();
     try {
-      await axios.get("/api/users/logout");
-      setIsLoggedIn(false);
-      console.log("Logout successful:");
+      await axios.get("/api/users/logout", { withCredentials: true });
+      setIsLoggedIn(false);                              // update UI instantly
+      window.dispatchEvent(new Event("auth:changed"));   // notify other tabs/components
       router.push("/login");
     } catch (error: any) {
       console.log(error.message, "Logout failed");
@@ -37,7 +48,6 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
-      {/* Main Header */}
       <div className="bg-[#1e293b] py-4 px-4 shadow-md">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           {/* Logo */}
@@ -63,7 +73,6 @@ export default function Header() {
 
           {/* Right Icons */}
           <div className="hidden md:flex items-center gap-6">
-            {/* Toggle Search */}
             <button
               className="text-white hover:text-[#38bdf8]"
               onClick={() => setSearchOpen(!searchOpen)}
@@ -75,8 +84,8 @@ export default function Header() {
               <ShoppingCart size={24} />
             </button>
 
-            {/* Conditionally show Sign Up or Logout */}
-            {isLoggedIn ? (
+            {/* Auth buttons (render only when known) */}
+            {isLoggedIn === null ? null : isLoggedIn ? (
               <button
                 onClick={logout}
                 className="flex items-center gap-2 text-white bg-red-600 px-4 py-2 rounded-xl hover:bg-red-700 transition-colors text-lg font-semibold"
@@ -133,7 +142,6 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Mobile search */}
           <div className="flex items-center bg-[#334155] rounded-xl px-3 py-2">
             <input
               type="text"
@@ -143,13 +151,12 @@ export default function Header() {
             <Search className="text-[#38bdf8]" size={22} />
           </div>
 
-          {/* Mobile actions */}
           <div className="flex items-center justify-between mt-4">
             <button className="text-white hover:text-[#38bdf8]">
               <ShoppingCart size={24} />
             </button>
 
-            {isLoggedIn ? (
+            {isLoggedIn === null ? null : isLoggedIn ? (
               <button
                 onClick={logout}
                 className="flex items-center gap-2 text-white bg-red-600 px-4 py-2 rounded-xl hover:bg-red-700 transition-colors text-lg font-semibold"
