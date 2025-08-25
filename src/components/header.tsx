@@ -1,11 +1,40 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, Search, ShoppingCart, User } from "lucide-react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Header() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false); // mobile menu
   const [searchOpen, setSearchOpen] = useState(false); // search bar
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get("/api/users/me");
+        setIsLoggedIn(res.data.authenticated);
+      } catch (error) {
+        setIsLoggedIn(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  const logout = async (e: any) => {
+    e.preventDefault();
+    try {
+      await axios.get("/api/users/logout");
+      setIsLoggedIn(false);
+      console.log("Logout successful:");
+      router.push("/login");
+    } catch (error: any) {
+      console.log(error.message, "Logout failed");
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       {/* Main Header */}
@@ -18,28 +47,16 @@ export default function Header() {
 
           {/* Center Nav */}
           <nav className="hidden md:flex gap-8">
-            <Link
-              className="text-white hover:text-[#38bdf8] transition-colors text-lg"
-              href="#"
-            >
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
               Home
             </Link>
-            <Link
-              className="text-white hover:text-[#38bdf8] transition-colors text-lg"
-              href="#"
-            >
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
               Shop
             </Link>
-            <Link
-              className="text-white hover:text-[#38bdf8] transition-colors text-lg"
-              href="#"
-            >
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
               About
             </Link>
-            <Link
-              className="text-white hover:text-[#38bdf8] transition-colors text-lg"
-              href="#"
-            >
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
               Contact
             </Link>
           </nav>
@@ -58,12 +75,22 @@ export default function Header() {
               <ShoppingCart size={24} />
             </button>
 
-            <Link
-              className="flex items-center gap-2 text-white bg-[#38bdf8] px-4 py-2 rounded-xl hover:bg-[#0ea5e9] transition-colors text-lg font-semibold"
-              href="/signup"
-            >
-              <User size={20} /> Sign Up
-            </Link>
+            {/* Conditionally show Sign Up or Logout */}
+            {isLoggedIn ? (
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 text-white bg-red-600 px-4 py-2 rounded-xl hover:bg-red-700 transition-colors text-lg font-semibold"
+              >
+                <User size={20} /> Logout
+              </button>
+            ) : (
+              <Link
+                className="flex items-center gap-2 text-white bg-[#38bdf8] px-4 py-2 rounded-xl hover:bg-[#0ea5e9] transition-colors text-lg font-semibold"
+                href="/signup"
+              >
+                <User size={20} /> Sign Up
+              </Link>
+            )}
           </div>
 
           {/* Hamburger (mobile) */}
@@ -92,32 +119,16 @@ export default function Header() {
       {isOpen && (
         <div className="md:hidden bg-[#1e293b] shadow-lg p-6 space-y-6 animate-slideDown">
           <nav className="flex flex-col gap-4">
-            <Link
-              className="text-white hover:text-[#38bdf8] text-lg"
-              href="#"
-              onClick={() => setIsOpen(false)}
-            >
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
               Home
             </Link>
-            <Link
-              className="text-white hover:text-[#38bdf8] text-lg"
-              href="#"
-              onClick={() => setIsOpen(false)}
-            >
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
               Shop
             </Link>
-            <Link
-              className="text-white hover:text-[#38bdf8] text-lg"
-              href="#"
-              onClick={() => setIsOpen(false)}
-            >
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
               About
             </Link>
-            <Link
-              className="text-white hover:text-[#38bdf8] text-lg"
-              href="#"
-              onClick={() => setIsOpen(false)}
-            >
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
               Contact
             </Link>
           </nav>
@@ -137,13 +148,23 @@ export default function Header() {
             <button className="text-white hover:text-[#38bdf8]">
               <ShoppingCart size={24} />
             </button>
-            <Link
-              className="flex items-center gap-2 text-white bg-[#38bdf8] px-4 py-2 rounded-xl hover:bg-[#0ea5e9] transition-colors text-lg font-semibold"
-              href="/signup"
-              onClick={() => setIsOpen(false)}
-            >
-              <User size={20} /> Sign Up
-            </Link>
+
+            {isLoggedIn ? (
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 text-white bg-red-600 px-4 py-2 rounded-xl hover:bg-red-700 transition-colors text-lg font-semibold"
+              >
+                <User size={20} /> Logout
+              </button>
+            ) : (
+              <Link
+                className="flex items-center gap-2 text-white bg-[#38bdf8] px-4 py-2 rounded-xl hover:bg-[#0ea5e9] transition-colors text-lg font-semibold"
+                href="/signup"
+                onClick={() => setIsOpen(false)}
+              >
+                <User size={20} /> Sign Up
+              </Link>
+            )}
           </div>
         </div>
       )}

@@ -1,35 +1,11 @@
 "use client";
-import axios from "axios";
-import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 
 export default function Home() {
-  const router = useRouter();
-
-  const logout = async (e:any) => {
-    e.preventDefault()
-    try {
-      await axios.get('/api/users/logout')
-      console.log("Logout successful:");
-      router.push('/login');
-    } catch (error:any) {
-      console.log(error.message , "Logout failed");
-
-    }
-  }
-
   return (
     <div>
-
-
-      <button
-        onClick={logout}
-        className="max-w-[50%] mx-auto flex items-center gap-2 text-white bg-red-600 px-4 py-2 mt-25 rounded-xl hover:bg-red-700 transition-colors text-lg font-semibold"
-      >
-        <User size={20} /> Logout
-      </button>
       {/* Hero / Banner */}
       <section className="px-8 pt-30 text-center">
         <div className="bg-white/10 border border-white/20 rounded-2xl p-10 backdrop-blur-lg shadow-xl max-w-5xl mx-auto">
