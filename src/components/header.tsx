@@ -51,22 +51,22 @@ export default function Header() {
       <div className="bg-[#1e293b] py-4 px-4 shadow-md">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           {/* Logo */}
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-wide">
+          <Link href="/" className="text-2xl md:text-3xl font-extrabold text-white tracking-wide">
             Extreme<span className="text-[#38bdf8]">Store</span>
-          </h1>
+          </Link>
 
           {/* Center Nav */}
           <nav className="hidden md:flex gap-8">
-            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="/">
               Home
             </Link>
-            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="/shop">
               Shop
             </Link>
-            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="/about">
               About
             </Link>
-            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="#">
+            <Link className="text-white hover:text-[#38bdf8] transition-colors text-lg" href="/contact">
               Contact
             </Link>
           </nav>
@@ -128,16 +128,16 @@ export default function Header() {
       {isOpen && (
         <div className="md:hidden bg-[#1e293b] shadow-lg p-6 space-y-6 animate-slideDown">
           <nav className="flex flex-col gap-4">
-            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="/" onClick={() => setIsOpen(false)}>
               Home
             </Link>
-            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="/shop" onClick={() => setIsOpen(false)}>
               Shop
             </Link>
-            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="/about" onClick={() => setIsOpen(false)}>
               About
             </Link>
-            <Link className="text-white hover:text-[#38bdf8] text-lg" href="#" onClick={() => setIsOpen(false)}>
+            <Link className="text-white hover:text-[#38bdf8] text-lg" href="/contact" onClick={() => setIsOpen(false)}>
               Contact
             </Link>
           </nav>

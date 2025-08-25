@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
     const token = request.cookies.get("token")?.value || "";
 
     if (token && isPublicPath) {
-        return NextResponse.redirect(new URL("/", request.url));
+        return NextResponse.redirect(new URL("/my-account", request.url));
     }
     if (!token && !isPublicPath) {
         return NextResponse.redirect(new URL("/login", request.url));
@@ -23,5 +23,6 @@ export const config = {
     '/shop',
     '/about',
     '/contact',
+    '/my-account',
   ],
 };
