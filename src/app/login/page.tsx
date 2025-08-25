@@ -28,6 +28,7 @@ export default function Login() {
 
       setTimeout(() => {
         router.push("/");
+        router.refresh();
       }, 2000);
     } catch (error: any) {
       console.error("Login failed:", error.message);
